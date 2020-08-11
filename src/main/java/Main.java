@@ -50,7 +50,12 @@ public class Main {
         }
 
         System.out.println("Общее количество студентов в базе " + collection.countDocuments());
-        collection.find().forEach(document -> System.out.println(document));
+        BsonDocument query = BsonDocument.parse("{age: {$gt: 40}}");
+        System.out.println("Количество студентов старше 40 лет " + collection.countDocuments(query));
+        query = BsonDocument.parse("{age : 1}");
+        collection.find().sort(query).limit(1).forEach((Consumer<? super Document>) document ->
+        {System.out.println("Имя самого молодого студента " + document.get("name"));});
+
 
     }
     public static Queue<String> getStudentsFromFile(String path) {
